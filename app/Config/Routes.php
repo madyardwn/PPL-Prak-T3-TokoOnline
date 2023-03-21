@@ -42,6 +42,7 @@ $routes->group(
         $routes->get('/', 'C_Barang::index');
         $routes->get('create', 'C_Barang::create');
         $routes->post('store', 'C_Barang::store');
+        $routes->get('show/(:num)', 'C_Barang::show/$1');
         $routes->get('edit/(:num)', 'C_Barang::edit/$1');
         $routes->post('update/(:num)', 'C_Barang::update/$1');
         $routes->get('delete/(:num)', 'C_Barang::destroy/$1');
@@ -50,6 +51,8 @@ $routes->group(
         $routes->get('logout', 'C_Auth::logout');
     }
 );
+
+$routes->get('/api/barang', 'C_Api::getBarang');
 
 /*
  * --------------------------------------------------------------------

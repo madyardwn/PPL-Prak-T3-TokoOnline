@@ -10,7 +10,7 @@ class M_Barang extends Model
     protected $primaryKey = 'id';
 
     protected $allowedFields = [
-        'nama_barang', 'harga', 'stok', 'gambar'
+        'nama_barang', 'harga', 'stok', 'gambar', 'barcode'
     ];
 
     public function search($keyword)

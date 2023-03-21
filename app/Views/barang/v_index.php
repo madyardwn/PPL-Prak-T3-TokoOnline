@@ -34,8 +34,9 @@
           <li class="list-group-item">Harga : Rp. <?php echo number_format($b['harga'], 0, ',', '.') ?></li>
         </ul>
         <div class="card-footer text-center">
-          <a href="<?php echo base_url('barang/edit/' . $b['id']) ?>" class="fa fa-edit btn btn-warning"> Edit</a>
-          <a href="<?php echo base_url('barang/delete/' . $b['id']) ?>" class="fa fa-trash btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')"> Delete</a>
+          <a href="<?php echo base_url('barang/edit/' . $b['id']) ?>" class="fa fa-edit btn btn-warning" style="font-size: 12px;"> Edit</a>
+          <a href="<?php echo base_url('barang/delete/' . $b['id']) ?>" class="fa fa-trash btn btn-danger" style="font-size: 12px;"> Hapus</a>
+          <a href="<?php echo base_url('barang/show/' . $b['id']) ?>" class="fa fa-info btn btn-info text-white" style="font-size: 12px;"> Detail</a>
         </div>
       </div>
     </div>

@@ -43,6 +43,17 @@
           <?php } ?>
         </td>
       </tr>
+
+      <!--barcode-->
+      <tr>
+        <td>Barcode</td>
+        <td><input type="file" name="barcode"></td>
+        <td>
+          <?php if ($validation->getError('barcode')) { ?>
+            <i class="text-danger"><?php echo $error = $validation->getError('barcode'); ?></i>
+          <?php } ?>
+        </td>
+      </tr>
       <tr>
         <td></td>
         <td>

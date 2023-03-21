@@ -65,12 +65,16 @@ class C_Barang extends BaseController
 
         // Ambil gambar yang diupload
         $file = $this->request->getFile('gambar');
+        $barcode = $this->request->getFile('barcode');
 
         // Set nama file dan unique
         $fileName = uniqid() . '.' . $file->getExtension();
+        $barcodeName = uniqid() . '.' . $barcode->getExtension();
 
         // Simpan gambar ke folder public/gambar
         $file->move(ROOTPATH . 'public/gambar', $fileName);
+        $barcode->move(ROOTPATH . 'public/gambar', $barcodeName);
+
 
         // Simpan data ke database
         $barangModel = new \App\Models\M_Barang();
@@ -78,7 +82,8 @@ class C_Barang extends BaseController
             'nama_barang' => $this->request->getVar('nama_barang'),
             'harga' => $this->request->getVar('harga'),
             'stok' => $this->request->getVar('stok'),
-            'gambar' => $fileName
+            'gambar' => $fileName,
+            'barcode' => $barcodeName
         ]);
 
         return redirect()->to('/barang');
