@@ -4,7 +4,7 @@
 
 <div class="row mb-3 mt-3 justify-content-between">
   <div class="col-md-4">
-    <a href="<?php echo base_url('barang/create') ?>" class="fa fa-plus btn btn-primary"> Tambah Data</a>
+    <a href="<?php echo base_url('barang/create') ?>" class="fa fa-plus btn btn-primary"> Tambah Game </a>
   </div>
   <div class="col-md-4">
     <form action="<?php echo base_url('barang') ?>" method="get">
@@ -27,11 +27,26 @@
         <img src="<?php echo base_url('gambar/' . $b['gambar']) ?>" class="card-img-top" alt="<?php echo $b['nama_barang'] ?>" style="height: 200px; object-fit: cover;">
         <div class="card-body">
           <h5 class="card-title"><?php echo $b['nama_barang'] ?></h5>
-          <p class="card-text text-danger">Rp. <?php echo number_format($b['harga'], 0, ',', '.') ?></p>
+          <!-- stok -->
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Stok : <?php echo $b['stok'] ?></li>
+          <li class="list-group-item">Harga : Rp. <?php echo number_format($b['harga'], 0, ',', '.') ?></li>
+        </ul>
+        <div class="card-footer text-center">
+          <a href="<?php echo base_url('barang/edit/' . $b['id']) ?>" class="fa fa-edit btn btn-warning"> Edit</a>
+          <a href="<?php echo base_url('barang/delete/' . $b['id']) ?>" class="fa fa-trash btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus data ini?')"> Delete</a>
         </div>
       </div>
     </div>
   <?php endforeach; ?>
+</div>
+
+<!-- pagination -->
+<div class="row mt-3">
+  <div class="col">
+    <?php echo $pager->links('barang', 'barang_pagination') ?>
+  </div>
 </div>
 
 <?php echo $this->endSection(); ?>

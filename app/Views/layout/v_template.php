@@ -15,10 +15,15 @@
     <div class="container">
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
+          <li class="nav-item me-3">
             <a class="nav-link text-dark" href="<?php echo base_url('barang') ?>">Home</a>
           </li>
         </ul>
+
+        <!-- logout -->
+        <div class="d-flex">
+          <a href="<?php echo base_url('barang/logout') ?>" class="btn btn-danger">Logout</a>
+        </div>
       </div>
 
     </div>

@@ -31,13 +31,25 @@ $routes->set404Override();
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
 
-$routes->get('/barang', 'C_Barang::index');
-$routes->get('/barang/create', 'C_Barang::create');
-$routes->post('/barang/store', 'C_Barang::store');
-$routes->get('/barang/show/(:num)', 'C_Barang::show/$1');
-$routes->get('/barang/edit/(:num)', 'C_Barang::edit/$1');
-$routes->post('/barang/update/(:num)', 'C_Barang::update/$1');
-$routes->get('/barang/delete/(:num)', 'C_Barang::delete/$1');
+
+$routes->get('/login', 'C_Auth::index', ['filter' => 'unauthorized']);
+$routes->post('/login', 'C_Auth::login', ['filter' => 'unauthorized']);
+
+$routes->group(
+    'barang',
+    ['filter' => 'auth'],
+    function ($routes) {
+        $routes->get('/', 'C_Barang::index');
+        $routes->get('create', 'C_Barang::create');
+        $routes->post('store', 'C_Barang::store');
+        $routes->get('edit/(:num)', 'C_Barang::edit/$1');
+        $routes->post('update/(:num)', 'C_Barang::update/$1');
+        $routes->get('delete/(:num)', 'C_Barang::destroy/$1');
+
+        // logout
+        $routes->get('logout', 'C_Auth::logout');
+    }
+);
 
 /*
  * --------------------------------------------------------------------

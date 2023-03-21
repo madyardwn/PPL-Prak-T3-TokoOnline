@@ -6,39 +6,43 @@ use App\Controllers\BaseController;
 
 class C_Barang extends BaseController
 {
+    private $model;
+
+    // constructor
+    public function __construct()
+    {
+        // Load model
+        $this->model = new \App\Models\M_Barang();
+    }
+
     public function index()
     {
-        $model = new \App\Models\M_Barang();
-        $data = [
-            'title' => 'Daftar Barang',
-            'barang' => $model->findAll(),
-        ];
+        if ($this->request->getVar('keyword')) {
+            $keyword = $this->request->getVar('keyword');
+            $data = [
+                'title' => 'Daftar Barang',
+                'barang' => $this->model->search($keyword)->paginate(8, 'barang'),
+                'pager' => $this->model->pager,
+                'currentPage' => $this->model->getCurrentPage(),
+                'keyword' => $keyword
+            ];
+        } else {
+            $data = [
+                'title' => 'Daftar Barang',
+                'barang' => $this->model->paginate(8, 'barang'),
+                'pager' => $this->model->pager,
+                'currentPage' => $this->model->getCurrentPage(),
+                'keyword' => ''
+            ];
+        }
         return view('barang/v_index', $data);
-        // if ($this->request->getVar('keyword')) {
-        //     $keyword = $this->request->getVar('keyword');
-        //     $data = [
-        //         'title' => 'Daftar Barang',
-        //         'barang' => $model->search($keyword)->paginate(6, 'nama_barang'),
-        //         'pager' => $model->pager,
-        //         'keyword' => $keyword
-        //     ];
-        // } else {
-        //     $data = [
-        //         'title' => 'Daftar Barang',
-        //         'barang' => $model->paginate(6, 'nama_barang'),
-        //         'pager' => $model->pager,
-        //         'currentPage' => $model->getCurrentPage(),
-        //         'keyword' => ''
-        //     ];
-        // }
     }
 
     public function show($id)
     {
-        $model = new \App\Models\M_Barang();
         $data = [
             'title' => 'Detail Barang',
-            'barang' => $model->id($id)
+            'barang' => $this->model->find($id)
         ];
         return view('barang/v_show', $data);
     }
@@ -80,73 +84,66 @@ class C_Barang extends BaseController
         return redirect()->to('/barang');
     }
 
-    public function delete($id)
+    public function destroy($id)
     {
-        $model = new \App\Models\M_Barang();
-        $model->delete($id);
+        // remove image 
+        $barang = $this->model->find($id);
+
+        unlink(ROOTPATH . 'public/gambar/' . $barang['gambar']);
+
+        $this->model->delete($id);
         session()->setFlashdata('pesan', 'Data berhasil dihapus');
         return redirect()->to(base_url('barang'));
     }
 
-    public function update($nim)
+    public function update($id)
     {
-        $model = new \App\Models\M_Barang();
-        $data = [
-            'nama_barang' => $this->request->getPost('nama_barang'),
-            'harga' => $this->request->getPost('harga'),
-            'stok' => $this->request->getPost('stok'),
-            'gambar' => $this->request->getPost('gambar')
-        ];
+        $barang = $this->model->find($id);
 
-        $model->update($nim, $data);
+        // Jika ada file gambar yang diunggah
+        if ($this->request->getFile('gambar')->isValid() && !$this->request->getFile('gambar')->hasMoved()) {
+            // Hapus gambar lama jika ada
+            if ($barang['gambar'] && file_exists(ROOTPATH . 'public/gambar/' . $barang['gambar'])) {
+                unlink(ROOTPATH . 'public/gambar/' . $barang['gambar']);
+                dd('gambar lama dihapus');
+            }
+
+            $file = $this->request->getFile('gambar');
+
+            // Set nama file dan unique
+            $fileName = uniqid() . '.' . $file->getExtension();
+
+            // Simpan gambar ke folder public/gambar
+            $file->move(ROOTPATH . 'public/gambar', $fileName);
+
+            // Simpan data ke database
+            $this->model->update($id, [
+                'nama_barang' => $this->request->getVar('nama_barang'),
+                'harga' => $this->request->getVar('harga'),
+                'stok' => $this->request->getVar('stok'),
+                'gambar' => $fileName
+            ]);
+        }
+
+        // Jika tidak ada file gambar yang diunggah
+        else {
+            $this->model->update($id, [
+                'nama_barang' => $this->request->getVar('nama_barang'),
+                'harga' => $this->request->getVar('harga'),
+                'stok' => $this->request->getVar('stok'),
+                'gambar' => $barang['gambar']
+            ]);
+        }
+
         session()->setFlashdata('pesan', 'Data berhasil diubah');
         return redirect()->to(base_url('barang'));
-
-        // $rules = [
-        //     'nim' => 'required|numeric|min_length[9]|greater_than[0]|is_unique[mahasiswa.nim,nim,' . $nim . ']',
-        //     'nama' => 'required|alpha_space',
-        //     'umur' => 'required|numeric|greater_than[0]'
-        // ];
-        //
-        // $errors = [
-        //     'nim' => [
-        //         'required' => 'NIM harus diisi',
-        //         'numeric' => 'NIM harus berupa angka',
-        //         'is_unique' => 'NIM sudah digunakan',
-        //         'min_length' => 'NIM harus 9 digit',
-        //         'greater_than' => 'NIM tidak boleh 0 atau negatif',
-        //     ],
-        //     'nama' => [
-        //         'required' => 'Nama harus diisi',
-        //         'alpha_space' => 'Nama tidak boleh mengandung angka atau simbol',
-        //     ],
-        //     'umur' => [
-        //         'required' => 'Umur harus diisi',
-        //         'numeric' => 'Umur harus berupa angka',
-        //         'greater_than' => 'Umur tidak boleh 0 atau negatif',
-        //     ]
-        // ];
-        //
-        // if (!$this->validate($rules, $errors)) {
-        //     $data = [
-        //         'title' => 'Edit Data Mahasiswa',
-        //         'validation' => $this->validator,
-        //         'mahasiswa' => $model->id($nim)
-        //     ];
-        //     return view('mahasiswa/v_edit', $data);
-        // } else {
-        //     $model->edit($data, $nim);
-        //     session()->setFlashdata('pesan', 'Data berhasil diubah');
-        //     return redirect()->to(base_url('mahasiswa'));
-        // }
     }
 
     public function edit($id)
     {
-        $model = new \App\Models\M_Barang();
         $data = [
             'title' => 'Edit Data Barang',
-            'barang' => $model->id($id)
+            'barang' => $this->model->find($id)
         ];
         return view('barang/v_edit', $data);
     }

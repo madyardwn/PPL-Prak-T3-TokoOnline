@@ -33,6 +33,11 @@ class Barang extends Migration
                 'constraint' => 255,
                 'null' => true
             ],
+            'barcode' => [
+                'type' => 'VARCHAR',
+                'constraint' => 255,
+                'null' => true
+            ],
             'created_at' => [
                 'type' => 'DATETIME',
                 'null' => true
