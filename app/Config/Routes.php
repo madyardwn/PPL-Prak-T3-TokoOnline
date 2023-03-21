@@ -53,6 +53,8 @@ $routes->group(
 );
 
 $routes->get('/api/barang', 'C_Api::getBarang');
+$routes->get('/api/barang/add/(:num)/(:num)', 'C_Api::addStock/$1/$2');
+$routes->get('/api/barang/reduce/(:num)', 'C_Api::reduceStock/$1');
 
 /*
  * --------------------------------------------------------------------

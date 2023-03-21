@@ -35,7 +35,7 @@
   </tr>
 
   <tr>
-    <td>Gambar 2</td>
+    <td>Barcode</td>
     <td>
       <img src="<?php echo base_url('gambar/' . $barang['barcode']) ?>" alt="<?php echo $barang['nama_barang'] ?>" style="width: 200px; object-fit: cover;">
     </td>

@@ -49,16 +49,16 @@
       </td>
     </tr>
     <tr>
-      <td>Barcode</td>
+      <td>Gambar</td>
       <td>
-        <img src="<?php echo base_url('gambar/' . $barang['barcode']) ?>" class="card-img-top" alt="<?php echo $barang['nama_barang'] ?>" style="height: 200px; object-fit: cover; width: 200px;">
+        <img src="<?php echo base_url('gambar/' . $barang['gambar']) ?>" class="card-img-top" alt="<?php echo $barang['nama_barang'] ?>" style="height: 200px; object-fit: cover; width: 200px;">
         <br>
         <br>
-        <input type="file" name="barcode" class="form-control">
+        <input type="file" name="gambar" class="form-control">
       </td>
       <td>
-        <?php if ($validation->getError('barcode')) { ?>
-          <i>* <?php echo $error = $validation->getError('barcode'); ?></i>
+        <?php if ($validation->getError('gambar')) { ?>
+          <i>* <?php echo $error = $validation->getError('gambar'); ?></i>
         <?php } ?>
       </td>
     </tr>

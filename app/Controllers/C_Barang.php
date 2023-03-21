@@ -47,34 +47,36 @@ class C_Barang extends BaseController
         return view('barang/v_show', $data);
     }
 
+
     public function store()
     {
-        $validation =  \Config\Services::validation();
+        $validation = \Config\Services::validation();
 
         // Validasi input
         $validation->setRules([
             'nama_barang' => 'required',
             'harga' => 'required|numeric',
-            'stok' => 'required|numeric'
+            'stok' => 'required|numeric',
+            'gambar' => 'uploaded[gambar]|max_size[gambar,1024]|ext_in[gambar,jpg,jpeg,png]',
+            'barcode' => 'uploaded[barcode]|max_size[barcode,1024]|ext_in[barcode,jpg,jpeg,png]'
         ]);
 
-        // Cek validasi
-        if (!$validation->withRequest($this->request)->run()) {
-            return redirect()->back()->withInput()->with('validation', $validation);
+        // Jalankan validasi
+        if (!$validation->run($this->request->getPost())) {
+            return redirect()->back()->withInput()->with('validation', $validation->getErrors());
         }
 
-        // Ambil gambar yang diupload
+        // Ambil file yang diupload
         $file = $this->request->getFile('gambar');
         $barcode = $this->request->getFile('barcode');
 
         // Set nama file dan unique
-        $fileName = uniqid() . '.' . $file->getExtension();
-        $barcodeName = uniqid() . '.' . $barcode->getExtension();
+        $fileName = uniqid() . '.' . $file->getClientExtension();
+        $barcodeName = uniqid() . '.' . $barcode->getClientExtension();
 
-        // Simpan gambar ke folder public/gambar
+        // Simpan file ke folder public/gambar
         $file->move(ROOTPATH . 'public/gambar', $fileName);
         $barcode->move(ROOTPATH . 'public/gambar', $barcodeName);
-
 
         // Simpan data ke database
         $barangModel = new \App\Models\M_Barang();
@@ -110,7 +112,6 @@ class C_Barang extends BaseController
             // Hapus gambar lama jika ada
             if ($barang['gambar'] && file_exists(ROOTPATH . 'public/gambar/' . $barang['gambar'])) {
                 unlink(ROOTPATH . 'public/gambar/' . $barang['gambar']);
-                dd('gambar lama dihapus');
             }
 
             $file = $this->request->getFile('gambar');
@@ -130,13 +131,39 @@ class C_Barang extends BaseController
             ]);
         }
 
-        // Jika tidak ada file gambar yang diunggah
-        else {
+        // jika ada file barcode yang diunggah
+        if ($this->request->getFile('barcode')->isValid() && !$this->request->getFile('barcode')->hasMoved()) {
+            // Hapus barcode lama jika ada
+            if ($barang['barcode'] && file_exists(ROOTPATH . 'public/gambar/' . $barang['barcode'])) {
+                unlink(ROOTPATH . 'public/gambar/' . $barang['barcode']);
+            }
+
+            $barcode = $this->request->getFile('barcode');
+
+            // Set nama file dan unique
+            $barcodeName = uniqid() . '.' . $barcode->getExtension();
+
+            // Simpan gambar ke folder public/gambar
+            $barcode->move(ROOTPATH . 'public/gambar', $barcodeName);
+
+            // Simpan data ke database
             $this->model->update($id, [
                 'nama_barang' => $this->request->getVar('nama_barang'),
                 'harga' => $this->request->getVar('harga'),
                 'stok' => $this->request->getVar('stok'),
-                'gambar' => $barang['gambar']
+                'barcode' => $barcodeName
+            ]);
+        }
+
+        // Jika tidak ada file gambar yang diunggah
+        if (!$this->request->getFile('gambar')->isValid() && !$this->request->getFile('barcode')->isValid()) {
+            // Simpan data ke database
+            $this->model->update($id, [
+                'nama_barang' => $this->request->getVar('nama_barang'),
+                'harga' => $this->request->getVar('harga'),
+                'stok' => $this->request->getVar('stok'),
+                'gambar' => $barang['gambar'],
+                'barcode' => $barang['barcode']
             ]);
         }
 
