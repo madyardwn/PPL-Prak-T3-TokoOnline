@@ -49,20 +49,6 @@
       </td>
     </tr>
     <tr>
-      <td>Gambar</td>
-      <td>
-        <img src="<?php echo base_url('gambar/' . $barang['gambar']) ?>" class="card-img-top" alt="<?php echo $barang['nama_barang'] ?>" style="height: 200px; object-fit: cover; width: 200px;">
-        <br>
-        <br>
-        <input type="file" name="gambar" class="form-control">
-      </td>
-      <td>
-        <?php if ($validation->getError('gambar')) { ?>
-          <i>* <?php echo $error = $validation->getError('gambar'); ?></i>
-        <?php } ?>
-      </td>
-    </tr>
-    <tr>
       <td></td>
       <td>
         <input type="submit" class="btn btn-primary" value="Simpan">

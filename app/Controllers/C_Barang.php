@@ -63,7 +63,9 @@ class C_Barang extends BaseController
 
         // Jalankan validasi
         if (!$validation->run($this->request->getPost())) {
-            return redirect()->back()->withInput()->with('validation', $validation->getErrors());
+            // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
+            session()->setFlashdata('errors', $validation->getErrors());
+            return redirect()->back()->withInput();
         }
 
         // Ambil file yang diupload
@@ -97,6 +99,7 @@ class C_Barang extends BaseController
         $barang = $this->model->find($id);
 
         unlink(ROOTPATH . 'public/gambar/' . $barang['gambar']);
+        unlink(ROOTPATH . 'public/gambar/' . $barang['barcode']);
 
         $this->model->delete($id);
         session()->setFlashdata('pesan', 'Data berhasil dihapus');
@@ -128,30 +131,6 @@ class C_Barang extends BaseController
                 'harga' => $this->request->getVar('harga'),
                 'stok' => $this->request->getVar('stok'),
                 'gambar' => $fileName
-            ]);
-        }
-
-        // jika ada file barcode yang diunggah
-        if ($this->request->getFile('barcode')->isValid() && !$this->request->getFile('barcode')->hasMoved()) {
-            // Hapus barcode lama jika ada
-            if ($barang['barcode'] && file_exists(ROOTPATH . 'public/gambar/' . $barang['barcode'])) {
-                unlink(ROOTPATH . 'public/gambar/' . $barang['barcode']);
-            }
-
-            $barcode = $this->request->getFile('barcode');
-
-            // Set nama file dan unique
-            $barcodeName = uniqid() . '.' . $barcode->getExtension();
-
-            // Simpan gambar ke folder public/gambar
-            $barcode->move(ROOTPATH . 'public/gambar', $barcodeName);
-
-            // Simpan data ke database
-            $this->model->update($id, [
-                'nama_barang' => $this->request->getVar('nama_barang'),
-                'harga' => $this->request->getVar('harga'),
-                'stok' => $this->request->getVar('stok'),
-                'barcode' => $barcodeName
             ]);
         }
 

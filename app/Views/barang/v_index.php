@@ -37,8 +37,6 @@
           <a href="<?php echo base_url('barang/edit/' . $b['id']) ?>" class="fa fa-edit btn btn-warning" style="font-size: 12px;"> Edit</a>
           <a href="<?php echo base_url('barang/delete/' . $b['id']) ?>" class="fa fa-trash btn btn-danger" style="font-size: 12px;"> Hapus</a>
           <a href="<?php echo base_url('barang/show/' . $b['id']) ?>" class="fa fa-info btn btn-info text-white" style="font-size: 12px;"> Detail</a>
-          <!--reduce stok-->
-          <a href="<?php echo base_url('api/barang/reduce/' . $b['id']) ?>" class="fa fa-minus btn btn-danger" style="font-size: 12px;"> Kurangi Stok</a>
         </div>
       </div>
     </div>
