@@ -5,6 +5,7 @@
 <div class="row mb-3 mt-3 justify-content-between">
   <div class="col-md-4">
     <a href="<?php echo base_url('barang/create') ?>" class="fa fa-plus btn btn-primary"> Tambah Game </a>
+    <a href="<?php echo base_url('barang/cart') ?>" class="fa fa-shopping-cart btn btn-success"> Cart </a>
   </div>
   <div class="col-md-4">
     <form action="<?php echo base_url('barang') ?>" method="get">
@@ -37,6 +38,12 @@
           <a href="<?php echo base_url('barang/edit/' . $b['id']) ?>" class="fa fa-edit btn btn-warning" style="font-size: 12px;"> Edit</a>
           <a href="<?php echo base_url('barang/delete/' . $b['id']) ?>" class="fa fa-trash btn btn-danger" style="font-size: 12px;"> Hapus</a>
           <a href="<?php echo base_url('barang/show/' . $b['id']) ?>" class="fa fa-info btn btn-info text-white" style="font-size: 12px;"> Detail</a>
+        </div>
+        <!-- add to cart -->
+        <div class="card-footer text-center">
+          <form action="<?php echo base_url('barang/cart/add/' . $b['id']) ?>" method="get">
+            <button type="submit" class="fa fa-shopping-cart btn btn-success" style="font-size: 12px;"> Add to Cart</button>
+          </form>
         </div>
       </div>
     </div>

@@ -47,6 +47,12 @@ $routes->group(
         $routes->post('update/(:num)', 'C_Barang::update/$1');
         $routes->get('delete/(:num)', 'C_Barang::destroy/$1');
 
+        // cart
+        $routes->get('cart', 'C_Cart::index');
+        $routes->get('cart/add/(:num)', 'C_Cart::add/$1');
+        // checkout
+        $routes->get('cart/checkout', 'C_Cart::checkout');
+
         // logout
         $routes->get('logout', 'C_Auth::logout');
     }

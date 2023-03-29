@@ -22,4 +22,16 @@ class M_Barang extends Model
     {
         return $this->currentPage;
     }
+
+
+    public function getStok()
+    {
+        $query = $this->db->query("SELECT stok FROM barang");
+        return $query->getRowArray();
+    }
+
+    public function updateBarang($id, $data)
+    {
+        $this->db->table($this->table)->update($data, ['id' => $id]);
+    }
 }
