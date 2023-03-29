@@ -11,18 +11,19 @@ class C_Cart extends BaseController
 
   public function __construct()
   {
-    $this->cart = new \App\Models\M_Cart();
     $this->barang = new \App\Models\M_Barang();
+    $this->cart = session()->has('cart') ? session()->get('cart') : [
+      'items' => [],
+      'total' => 0
+    ];
   }
 
   public function index()
   {
     $data = [
       'title' => 'Cart',
-      'cart' => $this->cart->getCart(),
-      'total' => $this->cart->getCartTotal(),
-      'count' => $this->cart->getCartCount(),
-      'barang' => $this->barang->findAll(),
+      'cart' => $this->cart['items'],
+      'total' => $this->cart['total']
     ];
 
     return view('cart/v_index', $data);
@@ -31,48 +32,91 @@ class C_Cart extends BaseController
   public function add($id)
   {
     $barang = $this->barang->find($id);
-    $cart = $this->cart->getCartByBarangId($id);
 
-    if ($cart) {
-      $this->cart->updateCart($cart->id, ['qty' => $cart->qty + 1]);
+    if (session()->has('cart')) {
+      $items = $this->cart['items'];
+      $index = array_search($id, array_column($items, 'id'));
+
+      if ($index !== false) {
+        $items[$index]['qty']++;
+        $items[$index]['subtotal'] = $items[$index]['qty'] * $items[$index]['harga'];
+        $this->cart['items'] = $items;
+        $this->cart['total'] += $barang['harga'];
+      } else {
+        $data = [
+          'id' => $barang['id'],
+          'nama' => $barang['nama_barang'],
+          'gambar' => $barang['gambar'],
+          'harga' => $barang['harga'],
+          'qty' => 1,
+          'subtotal' => $barang['harga']
+        ];
+
+        array_push($this->cart['items'], $data);
+        $this->cart['total'] += $barang['harga'];
+      }
     } else {
       $data = [
-        'id_barang' => $barang['id'],
+        'id' => $barang['id'],
+        'nama' => $barang['nama_barang'],
+        'gambar' => $barang['gambar'],
+        'harga' => $barang['harga'],
         'qty' => 1,
+        'subtotal' => $barang['harga']
       ];
 
-      $this->cart->insertCart($data);
+      $this->cart = [
+        'items' => [$data],
+        'total' => $barang['harga']
+      ];
     }
 
-    return redirect()->to('/barang');
+    session()->set('cart', $this->cart);
+    return redirect()->to(base_url('barang/cart'));
   }
 
-  public function update($id)
+  public function reduce($id)
   {
-    $qty = $this->request->getPost('qty');
-    $this->cart->updateCart($id, ['qty' => $qty]);
+    $barang = $this->barang->find($id);
 
-    return redirect()->to('/cart');
+    if (session()->has('cart')) {
+      $items = $this->cart['items'];
+      $index = array_search($id, array_column($items, 'id'));
+
+      if ($index !== false) {
+        if ($items[$index]['qty'] > 1) {
+          $items[$index]['qty']--;
+          $items[$index]['subtotal'] = $items[$index]['qty'] * $items[$index]['harga'];
+          $this->cart['items'] = $items;
+          $this->cart['total'] -= $barang['harga'];
+        } else {
+          array_splice($items, $index, 1);
+          $this->cart['items'] = $items;
+          $this->cart['total'] -= $barang['harga'];
+        }
+      }
+    }
+
+    session()->set('cart', $this->cart);
+    return redirect()->to(base_url('barang/cart'));
   }
 
+  // checkout cart
   public function checkout()
   {
-    $cart = $this->cart->getCart();
+    if (session()->has('cart')) {
+      // langsung checkout saja
 
-    foreach ($cart as $c) {
-      $barang = $this->barang->find($c->id_barang);
-      $this->barang->updateBarang($c->id_barang, ['stok' => $barang['stok'] - $c->qty]);
+    } else {
+      session()->setFlashdata('pesan', 'Cart masih kosong');
+      return redirect()->to(base_url('barang'));
     }
-
-    $this->cart->deleteCartAll();
-
-    return redirect()->to('/cart');
   }
 
-  public function delete($id)
+  public function destroy()
   {
-    $this->cart->deleteCart($id);
-
-    return redirect()->to('/cart');
+    session()->remove('cart');
+    session()->setFlashdata('pesan', 'Cart berhasil dihapus');
+    return redirect()->to(base_url('barang'));
   }
 }

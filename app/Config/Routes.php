@@ -50,8 +50,8 @@ $routes->group(
         // cart
         $routes->get('cart', 'C_Cart::index');
         $routes->get('cart/add/(:num)', 'C_Cart::add/$1');
-        // checkout
-        $routes->get('cart/checkout', 'C_Cart::checkout');
+        $routes->get('cart/reduce/(:num)', 'C_Cart::reduce/$1');
+        $routes->get('cart/destroy', 'C_Cart::destroy');
 
         // logout
         $routes->get('logout', 'C_Auth::logout');
