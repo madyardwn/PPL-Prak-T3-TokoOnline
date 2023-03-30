@@ -48,6 +48,21 @@
         <?php } ?>
       </td>
     </tr>
+
+    <tr>
+      <td>Barcode</td>
+      <td>
+        <img src="<?php echo base_url('gambar/' . $barang['barcode']) ?>" class="card-img-top" alt="<?php echo $barang['nama_barang'] ?>" style="height: 200px; object-fit: cover; width: 200px;">
+        <br>
+        <br>
+        <input type="file" name="gambar" class="form-control">
+      </td>
+      <td>
+        <?php if ($validation->getError('barcode')) { ?>
+          <i>* <?php echo $error = $validation->getError('barcode'); ?></i>
+        <?php } ?>
+      </td>
+    </tr>
     <tr>
       <td></td>
       <td>

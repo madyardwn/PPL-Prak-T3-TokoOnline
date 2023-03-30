@@ -4,6 +4,10 @@
 
 <h1>Cart</h1>
 
+<?php if (session()->getFlashdata('pesan')) : ?>
+  <i>* <?php echo session()->getFlashdata('pesan'); ?></i>
+<?php endif; ?>
+
 <!-- clear cart -->
 <div class="mb-3 text-right d-flex justify-content-end">
   <a href=" <?php echo base_url('barang/cart/destroy'); ?>" class="fa-pull-right fa fa-trash" style="text-decoration: none; font-size: 20px; color: red;"></a>
@@ -34,7 +38,8 @@
         <td class="text-center border">
           <a href="<?php echo base_url('barang/cart/reduce/' . $c['id']); ?>" class="fa fa-minus text-danger small" style="text-decoration: none;"></a>
           <p class="d-inline border px-2"><?php echo $c['qty']; ?></p>
-          <a href="<?php echo base_url('barang/cart/add/' . $c['id']); ?>" class="fa fa-plus text-success small" style="text-decoration: none"></a>
+          <a href="<?php echo base_url('barang/cart/add/' . $c['id']); ?>" class="fa fa-plus text-success small" style="text-decoration: none;"></a>
+
         </td>
         <td>Rp. <?php echo number_format($c['subtotal'], 0, ',', '.'); ?></td>
       </tr>

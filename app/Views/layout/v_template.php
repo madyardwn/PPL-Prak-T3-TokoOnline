@@ -18,6 +18,12 @@
           <li class="nav-item me-3">
             <a class="nav-link text-dark" href="<?php echo base_url('barang') ?>">Home</a>
           </li>
+          <li class="nav-item me-3">
+            <a class="nav-link text-dark" href="<?php echo base_url('barang/transaksi') ?>">Transaksi</a>
+          </li>
+          <li class="nav-item me-3">
+            <a class="nav-link text-dark" href="<?php echo base_url('barang/penjualan') ?>">Penjualan</a>
+          </li>
         </ul>
 
         <!-- logout -->

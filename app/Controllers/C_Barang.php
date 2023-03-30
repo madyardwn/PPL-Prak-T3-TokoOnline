@@ -135,14 +135,14 @@ class C_Barang extends BaseController
         }
 
         // Jika tidak ada file gambar yang diunggah
-        if (!$this->request->getFile('gambar')->isValid() && !$this->request->getFile('barcode')->isValid()) {
+        else {
             // Simpan data ke database
             $this->model->update($id, [
                 'nama_barang' => $this->request->getVar('nama_barang'),
                 'harga' => $this->request->getVar('harga'),
                 'stok' => $this->request->getVar('stok'),
-                'gambar' => $barang['gambar'],
-                'barcode' => $barang['barcode']
+                'gambar' => $barang['gambar'] ?? null,
+                'barcode' => $barang['barcode'] ?? null
             ]);
         }
 

@@ -52,6 +52,14 @@ $routes->group(
         $routes->get('cart/add/(:num)', 'C_Cart::add/$1');
         $routes->get('cart/reduce/(:num)', 'C_Cart::reduce/$1');
         $routes->get('cart/destroy', 'C_Cart::destroy');
+        $routes->get('cart/checkout', 'C_Cart::checkoutForm');
+        $routes->post('cart/checkout', 'C_Cart::checkout');
+
+        // checkout
+        $routes->get('transaksi', 'C_Transaksi::index');
+
+        // penjualan
+        $routes->get('penjualan', 'C_Penjualan::index');
 
         // logout
         $routes->get('logout', 'C_Auth::logout');

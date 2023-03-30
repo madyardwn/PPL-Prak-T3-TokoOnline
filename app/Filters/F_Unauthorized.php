@@ -12,7 +12,9 @@ class F_Unauthorized implements FilterInterface
   {
     // Do something here
     if (session()->get('loggedIn')) {
-      return redirect()->to('/mahasiswa');
+      // give a flashdata message
+      session()->setFlashdata('pesan', 'Anda sudah login');
+      return redirect()->to('/barang');
     }
   }
 
