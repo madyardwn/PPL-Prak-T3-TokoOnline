@@ -5,7 +5,9 @@
 <h1>Cart</h1>
 
 <?php if (session()->getFlashdata('pesan')) : ?>
-  <i>* <?php echo session()->getFlashdata('pesan'); ?></i>
+  <div class="alert alert-success" role="alert">
+    <?php echo session()->getFlashdata('pesan'); ?>
+  </div>
 <?php endif; ?>
 
 <!-- clear cart -->

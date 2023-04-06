@@ -18,7 +18,9 @@
 </div>
 
 <?php if (session()->getFlashdata('pesan')) : ?>
-  <i>* <?php echo session()->getFlashdata('pesan'); ?></i>
+  <div class="alert alert-success" role="alert">
+    <?php echo session()->getFlashdata('pesan'); ?>
+  </div>
 <?php endif; ?>
 
 <div class="row row-cols-1 row-cols-md-4 g-4">

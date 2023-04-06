@@ -11,8 +11,8 @@
       <td>Nama Game</td>
       <td><input autocomplete="off" type="text" name="nama_barang" value="<?php echo $barang['nama_barang'] ?>" class="form-control"></td>
       <td>
-        <?php if ($validation->getError('id')) { ?>
-          <i>* <?php echo $error = $validation->getError('id'); ?></i>
+        <?php if ($validation->getError('nama_barang')) { ?>
+          <i class="text-danger"><?php echo $error = $validation->getError('nama_barang'); ?></i>
         <?php } ?>
       </td>
     </tr>
@@ -21,7 +21,7 @@
       <td><input autocomplete="off" type="text" name="harga" value="<?php echo $barang['harga'] ?>" class="form-control"></td>
       <td>
         <?php if ($validation->getError('harga')) { ?>
-          <i>* <?php echo $error = $validation->getError('harga'); ?></i>
+          <i class="text-danger"><?php echo $error = $validation->getError('harga'); ?></i>
         <?php } ?>
       </td>
     </tr>
@@ -30,7 +30,7 @@
       <td><input autocomplete="off" type="text" name="stok" value="<?php echo $barang['stok'] ?>" class="form-control"></td>
       <td>
         <?php if ($validation->getError('stok')) { ?>
-          <i>* <?php echo $error = $validation->getError('stok'); ?></i>
+          <i class="text-danger"><?php echo $error = $validation->getError('stok'); ?></i>
         <?php } ?>
       </td>
     </tr>
@@ -48,21 +48,21 @@
         <?php } ?>
       </td>
     </tr>
-
+    <!-- 
     <tr>
       <td>Barcode</td>
       <td>
         <img src="<?php echo base_url('gambar/' . $barang['barcode']) ?>" class="card-img-top" alt="<?php echo $barang['nama_barang'] ?>" style="height: 200px; object-fit: cover; width: 200px;">
         <br>
         <br>
-        <input type="file" name="gambar" class="form-control">
+        <input type="file" name="barcode" class="form-control">
       </td>
       <td>
         <?php if ($validation->getError('barcode')) { ?>
           <i>* <?php echo $error = $validation->getError('barcode'); ?></i>
         <?php } ?>
       </td>
-    </tr>
+    </tr> -->
     <tr>
       <td></td>
       <td>

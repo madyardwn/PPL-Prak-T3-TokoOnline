@@ -35,6 +35,9 @@ $routes->get('/', 'Home::index');
 $routes->get('/login', 'C_Auth::index', ['filter' => 'unauthorized']);
 $routes->post('/login', 'C_Auth::login', ['filter' => 'unauthorized']);
 
+// barcode
+$routes->get('/barcode', 'Barcode::index');
+
 $routes->group(
     'barang',
     ['filter' => 'auth'],
@@ -46,6 +49,8 @@ $routes->group(
         $routes->get('edit/(:num)', 'C_Barang::edit/$1');
         $routes->post('update/(:num)', 'C_Barang::update/$1');
         $routes->get('delete/(:num)', 'C_Barang::destroy/$1');
+
+
 
         // cart
         $routes->get('cart', 'C_Cart::index');

@@ -13,13 +13,6 @@ class Transaksi extends Migration
                 'no_transaksi' => [
                     'type' => 'VARCHAR',
                     'constraint' => 100,
-                ],                
-                'tanggal_transaksi' => [
-                    'type' => 'DATE',
-                ],
-                'total_transaksi' => [
-                    'type' => 'INT',
-                    'constraint' => 11,
                 ],
                 'nama_pembeli' => [
                     'type' => 'VARCHAR',
@@ -36,6 +29,17 @@ class Transaksi extends Migration
                 'kota' => [
                     'type' => 'VARCHAR',
                     'constraint' => 100,
+                ],
+                'nomor_telepon' => [
+                    'type' => 'VARCHAR',
+                    'constraint' => 100,
+                ],
+                'tanggal_transaksi' => [
+                    'type' => 'DATE',
+                ],
+                'total_transaksi' => [
+                    'type' => 'INT',
+                    'constraint' => 11,
                 ],
             ]
         );

@@ -167,7 +167,14 @@ class C_Cart extends BaseController
         'errors' => [
           'required' => '{field} harus diisi.'
         ]
-      ]
+      ],
+      'nomor_telepon' => [
+        'label' => 'Nomor Telepon',
+        'rules' => 'required',
+        'errors' => [
+          'required' => '{field} harus diisi.'
+        ]
+      ],
     ]);
 
     if (!$validation->run($this->request->getPost())) {
@@ -188,6 +195,7 @@ class C_Cart extends BaseController
         'alamat' => $this->request->getPost('alamat'),
         'kecamatan' => $this->request->getPost('kecamatan'),
         'kota' => $this->request->getPost('kota'),
+        'nomor_telepon' => $this->request->getPost('nomor_telepon'),
         'tanggal_transaksi' => date('Y-m-d H:i:s')
       ];
       $this->transaksi->insert($data);

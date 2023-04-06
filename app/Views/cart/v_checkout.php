@@ -3,7 +3,9 @@
 <?php echo $this->section('content'); ?>
 
 <?php if (session()->getFlashdata('pesan')) : ?>
-    <i>* <?php echo session()->getFlashdata('pesan'); ?></i>
+    <div class="alert alert-success" role="alert">
+        <?php echo session()->getFlashdata('pesan'); ?>
+    </div>
 <?php endif; ?>
 <?php $validation = \Config\Services::validation(); ?>
 
@@ -68,6 +70,16 @@
                     <input autocomplete="off" placeholder="Kota" type="text" name="kota" class="form-control">
                     <?php if ($validation->getError('kota')) { ?>
                         <i class="text-danger"><?php echo $error = $validation->getError('kota'); ?></i>
+                    <?php } ?>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="nomor_telepon">Nomor Telepon</label>
+                <div class="input-group">
+                    <input autocomplete="off" placeholder="Nomor Telepon" type="text" name="nomor_telepon" class="form-control">
+                    <?php if ($validation->getError('nomor_telepon')) { ?>
+                        <i class="text-danger"><?php echo $error = $validation->getError('nomor_telepon'); ?></i>
                     <?php } ?>
                 </div>
             </div>

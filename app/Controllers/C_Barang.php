@@ -50,22 +50,55 @@ class C_Barang extends BaseController
 
     public function store()
     {
-        $validation = \Config\Services::validation();
 
-        // Validasi input
-        $validation->setRules([
+        $data = [
+            'nama_barang' => $this->request->getVar('nama_barang'),
+            'harga' => $this->request->getVar('harga'),
+            'stok' => $this->request->getVar('stok'),
+            'gambar' => $this->request->getVar('gambar'),
+            'barcode' => $this->request->getVar('barcode')
+        ];
+
+        $rules = [
             'nama_barang' => 'required',
             'harga' => 'required|numeric',
             'stok' => 'required|numeric',
-            'gambar' => 'uploaded[gambar]|max_size[gambar,1024]|ext_in[gambar,jpg,jpeg,png]',
-            'barcode' => 'uploaded[barcode]|max_size[barcode,1024]|ext_in[barcode,jpg,jpeg,png]'
-        ]);
+            'gambar' => 'uploaded[gambar]|max_size[gambar,1024]|is_image[gambar]|mime_in[gambar,image/jpg,image/jpeg,image/png]',
+            'barcode' => 'uploaded[barcode]|max_size[barcode,1024]|is_image[barcode]|mime_in[barcode,image/jpg,image/jpeg,image/png]'
+        ];
 
-        // Jalankan validasi
-        if (!$validation->run($this->request->getPost())) {
-            // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
-            session()->setFlashdata('errors', $validation->getErrors());
-            return redirect()->back()->withInput();
+        $errors = [
+            'nama_barang' => [
+                'required' => 'Nama barang harus diisi'
+            ],
+
+            'harga' => [
+                'required' => 'Harga barang harus diisi'
+            ],
+
+            'stok' => [
+                'required' => 'Stok barang harus diisi'
+            ],
+            'gambar' => [
+                'uploaded' => 'Gambar harus diupload',
+                'max_size' => 'Ukuran gambar terlalu besar',
+                'is_image' => 'Yang anda upload bukan gambar',
+                'mime_in' => 'Yang anda upload bukan gambar'
+            ],
+            'barcode' => [
+                'uploaded' => 'Barcode harus diupload',
+                'max_size' => 'Ukuran barcode terlalu besar',
+                'is_image' => 'Yang anda upload bukan barcode',
+                'mime_in' => 'Yang anda upload bukan barcode'
+            ]
+        ];
+
+        if (!$this->validate($rules, $errors)) {
+            $data = [
+                'title' => 'Tambah Barang',
+            ];
+
+            return view('barang/v_create', $data);
         }
 
         // Ambil file yang diupload
@@ -108,6 +141,50 @@ class C_Barang extends BaseController
 
     public function update($id)
     {
+        $data = [
+            'nama_barang' => $this->request->getVar('nama_barang'),
+            'harga' => $this->request->getVar('harga'),
+            'stok' => $this->request->getVar('stok'),
+            'gambar' => $this->request->getVar('gambar'),
+            'barcode' => $this->request->getVar('barcode')
+        ];
+
+        $rules = [
+            'nama_barang' => 'required',
+            'harga' => 'required|numeric',
+            'stok' => 'required|numeric',
+            'gambar' => 'max_size[gambar,1024]|is_image[gambar]|mime_in[gambar,image/jpg,image/jpeg,image/png]',
+        ];
+
+        $errors = [
+            'nama_barang' => [
+                'required' => 'Nama barang harus diisi'
+            ],
+
+            'harga' => [
+                'required' => 'Harga barang harus diisi'
+            ],
+
+            'stok' => [
+                'required' => 'Stok barang harus diisi'
+            ],
+            'gambar' => [
+                'max_size' => 'Ukuran gambar terlalu besar',
+                'is_image' => 'Yang anda upload bukan gambar',
+                'mime_in' => 'Yang anda upload bukan gambar'
+            ],
+        ];
+
+        if (!$this->validate($rules, $errors)) {
+            $data = [
+                'title' => 'Tambah Barang',
+                'barang' => $this->model->find($id),
+            ];
+
+            return view('barang/v_edit', $data);
+        }
+
+
         $barang = $this->model->find($id);
 
         // Jika ada file gambar yang diunggah

@@ -9,7 +9,7 @@
     <table class="table">
       <tr>
         <td>Nama Barang</td>
-        <td><input autocomplete="off" placeholder="Nama Barang" type="text" name="nama_barang" class="form-control"></td>
+        <td><input autocomplete="off" placeholder="Nama Barang" type="text" name="nama_barang" class="form-control" value="<?php echo old('nama_barang') ?>"></td>
         <td>
           <?php if ($validation->getError('nama_barang')) { ?>
             <i class="text-danger"><?php echo $error = $validation->getError('nama_barang'); ?></i>

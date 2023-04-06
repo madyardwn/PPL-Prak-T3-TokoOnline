@@ -10,12 +10,13 @@ class M_Transaksi extends Model
     protected $table = 'transaksi';
     protected $primaryKey = 'no_transaksi';
     protected $allowedFields = [
-        'no_transaksi', 
-        'total_transaksi', 
-        'nama_pembeli', 
-        'alamat', 
-        'kecamatan', 
-        'kota', 
-        'tanggal_transaksi'
+        'no_transaksi',
+        'total_transaksi',
+        'nama_pembeli',
+        'alamat',
+        'kecamatan',
+        'kota',
+        'tanggal_transaksi',
+        'nomor_telepon'
     ];
 }

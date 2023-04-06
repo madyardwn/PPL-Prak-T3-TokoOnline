@@ -3,7 +3,9 @@
 <?php echo $this->section('content'); ?>
 
 <?php if (session()->getFlashdata('pesan')) : ?>
-  <i>* <?php echo session()->getFlashdata('pesan'); ?></i>
+  <div class="alert alert-success" role="alert">
+    <?php echo session()->getFlashdata('pesan'); ?>
+  </div>
 <?php endif; ?>
 
 <div class="row row-cols-1 row-cols-md-4 g-4">
@@ -16,6 +18,7 @@
         <th scope="col">Alamat</th>
         <th scope="col">Kecamatan</th>
         <th scope="col">Kota</th>
+        <th scope="col">Nomor Telepon</th>
         <th scope="col">Tanggal</th>
         <th scope="col">Total Transaksi</th>
       </tr>
@@ -30,6 +33,7 @@
           <td><?php echo $t['alamat']; ?></td>
           <td><?php echo $t['kecamatan']; ?></td>
           <td><?php echo $t['kota']; ?></td>
+          <td><?php echo $t['nomor_telepon']; ?></td>
           <td><?php echo $t['tanggal_transaksi']; ?></td>
           <td><?php echo 'Rp. ' . number_format($t['total_transaksi'], 0, ',', '.'); ?></td>
         </tr>
