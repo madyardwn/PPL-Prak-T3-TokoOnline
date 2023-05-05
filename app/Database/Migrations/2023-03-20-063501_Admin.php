@@ -10,6 +10,10 @@ class Admin extends Migration
     {
         $this->forge->addField(
             [
+                'nip' => [
+                    'type' => 'VARCHAR',
+                    'constraint' => '100',
+                ],
                 'username' => [
                     'type' => 'VARCHAR',
                     'constraint' => '100',

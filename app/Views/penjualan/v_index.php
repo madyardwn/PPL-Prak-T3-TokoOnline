@@ -24,10 +24,10 @@
       <?php foreach ($penjualan as $p) : ?>
         <tr>
           <th scope="row"><?php echo $no++; ?></th>
-          <td><?php echo $p['no_transaksi']; ?></td>
-          <td><?php echo $p['nama_barang']; ?></td>
-          <td><?php echo $p['jumlah_jual']; ?></td>
-          <td><?php echo $p['harga_jual']; ?></td>
+          <td><?php echo $p['idtrans']; ?></td>
+          <td><?php echo $p['namabrg']; ?></td>
+          <td><?php echo $p['jmljual']; ?></td>
+          <td><?php echo $p['hargajual']; ?></td>
         </tr>
       <?php endforeach; ?>
     </tbody>

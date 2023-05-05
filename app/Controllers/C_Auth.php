@@ -29,7 +29,7 @@ class C_Auth extends BaseController
 
     if ($user) {
       $this->setUserSession($user);
-      return redirect()->to('/barang');
+      return redirect()->to('/kemeja');
     } else {
       session()->setFlashdata('pesan', 'username atau password salah');
       return redirect()->to('/login');

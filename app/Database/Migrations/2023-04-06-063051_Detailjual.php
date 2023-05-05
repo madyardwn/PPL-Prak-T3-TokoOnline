@@ -10,12 +10,13 @@ class Detailjual extends Migration
     {
         $this->forge->addField([
             'idtrans'       => [
-                'type'       => 'INT',
-                'constraint' => '5',
+                'type' => 'VARCHAR',
+                'constraint' => 100,
             ],
             'idkemeja' => [
                 'type' => 'INT',
                 'constraint' => '5',
+                'unsigned'       => true,
             ],
             'hargajual' => [
                 'type' => 'INT',
@@ -27,8 +28,8 @@ class Detailjual extends Migration
             ],
         ]);
 
-        $this->forge->addKey('idtrans', true);
-        $this->forge->addKey('idkemeja', true);
+        $this->forge->addForeignKey('idtrans', 'transaksipjl', 'idtrans', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('idkemeja', 'kemeja', 'idkemeja', 'CASCADE', 'CASCADE');
         $this->forge->createTable('detailjual');
     }
 

@@ -35,45 +35,79 @@ $routes->get('/', 'Home::index');
 $routes->get('/login', 'C_Auth::index', ['filter' => 'unauthorized']);
 $routes->post('/login', 'C_Auth::login', ['filter' => 'unauthorized']);
 
-// barcode
-$routes->get('/barcode', 'Barcode::index');
-
 $routes->group(
-    'barang',
+    'kemeja',
     ['filter' => 'auth'],
     function ($routes) {
-        $routes->get('/', 'C_Barang::index');
-        $routes->get('create', 'C_Barang::create');
-        $routes->post('store', 'C_Barang::store');
-        $routes->get('show/(:num)', 'C_Barang::show/$1');
-        $routes->get('edit/(:num)', 'C_Barang::edit/$1');
-        $routes->post('update/(:num)', 'C_Barang::update/$1');
-        $routes->get('delete/(:num)', 'C_Barang::destroy/$1');
-
-
+        $routes->get('/', 'C_Kemeja::index');
+        $routes->get('create', 'C_Kemeja::create');
+        $routes->post('store', 'C_Kemeja::store');
+        $routes->get('show/(:num)', 'C_Kemeja::show/$1');
+        $routes->get('edit/(:num)', 'C_Kemeja::edit/$1');
+        $routes->post('update/(:num)', 'C_Kemeja::update/$1');
+        $routes->get('delete/(:num)', 'C_Kemeja::destroy/$1');
 
         // cart
         $routes->get('cart', 'C_Cart::index');
+
+        // $routes->get('cart/add/(:num)', 'C_Cart::add/$1');
         $routes->get('cart/add/(:num)', 'C_Cart::add/$1');
         $routes->get('cart/reduce/(:num)', 'C_Cart::reduce/$1');
         $routes->get('cart/destroy', 'C_Cart::destroy');
         $routes->get('cart/checkout', 'C_Cart::checkoutForm');
         $routes->post('cart/checkout', 'C_Cart::checkout');
 
+        // get ongkir
+        $routes->post('cart/getOngkir', 'C_Cart::getOngkir');
+
         // checkout
-        $routes->get('transaksi', 'C_Transaksi::index');
+        $routes->get('transaksi', 'C_Transaksipjl::index');
 
         // penjualan
-        $routes->get('penjualan', 'C_Penjualan::index');
+        $routes->get('penjualan', 'C_Detailjual::index');
 
         // logout
         $routes->get('logout', 'C_Auth::logout');
     }
 );
 
-$routes->get('/api/barang', 'C_Api::getBarang');
-$routes->get('/api/barang/add/(:num)/(:num)', 'C_Api::addStock/$1/$2');
-$routes->get('/api/barang/reduce/(:num)', 'C_Api::reduceStock/$1');
+
+// $routes->group(
+//     'barang',
+//     ['filter' => 'auth'],
+//     function ($routes) {
+//         $routes->get('/', 'C_Barang::index');
+//         $routes->get('create', 'C_Barang::create');
+//         $routes->post('store', 'C_Barang::store');
+//         $routes->get('show/(:num)', 'C_Barang::show/$1');
+//         $routes->get('edit/(:num)', 'C_Barang::edit/$1');
+//         $routes->post('update/(:num)', 'C_Barang::update/$1');
+//         $routes->get('delete/(:num)', 'C_Barang::destroy/$1');
+//
+//
+//
+//         // cart
+//         $routes->get('cart', 'C_Cart::index');
+//         $routes->get('cart/add/(:num)', 'C_Cart::add/$1');
+//         $routes->get('cart/reduce/(:num)', 'C_Cart::reduce/$1');
+//         $routes->get('cart/destroy', 'C_Cart::destroy');
+//         $routes->get('cart/checkout', 'C_Cart::checkoutForm');
+//         $routes->post('cart/checkout', 'C_Cart::checkout');
+//
+//         // checkout
+//         $routes->get('transaksi', 'C_Transaksi::index');
+//
+//         // penjualan
+//         $routes->get('penjualan', 'C_Penjualan::index');
+//
+//         // logout
+//         $routes->get('logout', 'C_Auth::logout');
+//     }
+// );
+//
+// $routes->get('/api/barang', 'C_Api::getBarang');
+// $routes->get('/api/barang/add/(:num)/(:num)', 'C_Api::addStock/$1/$2');
+// $routes->get('/api/barang/reduce/(:num)', 'C_Api::reduceStock/$1');
 
 /*
  * --------------------------------------------------------------------
@@ -89,5 +123,5 @@ $routes->get('/api/barang/reduce/(:num)', 'C_Api::reduceStock/$1');
  * needing to reload it.
  */
 if (is_file(APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php')) {
-    require APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php';
+    include APPPATH . 'Config/' . ENVIRONMENT . '/Routes.php';
 }

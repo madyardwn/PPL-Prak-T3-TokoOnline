@@ -6,6 +6,7 @@
   <title><?php echo $title ?></title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -16,19 +17,19 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item me-3">
-            <a class="nav-link text-dark" href="<?php echo base_url('barang') ?>">Home</a>
+            <a class="nav-link text-dark" href="<?php echo base_url('kemeja') ?>">Home</a>
           </li>
           <li class="nav-item me-3">
-            <a class="nav-link text-dark" href="<?php echo base_url('barang/transaksi') ?>">Transaksi</a>
+            <a class="nav-link text-dark" href="<?php echo base_url('kemeja/transaksi') ?>">Transaksi</a>
           </li>
           <li class="nav-item me-3">
-            <a class="nav-link text-dark" href="<?php echo base_url('barang/penjualan') ?>">Penjualan</a>
+            <a class="nav-link text-dark" href="<?php echo base_url('kemeja/penjualan') ?>">Penjualan</a>
           </li>
         </ul>
 
         <!-- logout -->
         <div class="d-flex">
-          <a href="<?php echo base_url('barang/logout') ?>" class="btn btn-danger">Logout</a>
+          <a href="<?php echo base_url('kemeja/logout') ?>" class="btn btn-danger">Logout</a>
         </div>
       </div>
 

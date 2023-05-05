@@ -4,14 +4,14 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 
-class C_Transaksi extends BaseController
+class C_Transaksipjl extends BaseController
 {
     protected $transaksi;
 
     // constructor
     public function __construct()
     {
-        $this->transaksi = new \App\Models\M_Transaksi();
+        $this->transaksi = new \App\Models\M_Transaksipjl();
     }
 
     public function index()

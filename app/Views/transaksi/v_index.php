@@ -19,7 +19,6 @@
         <th scope="col">Kecamatan</th>
         <th scope="col">Kota</th>
         <th scope="col">Nomor Telepon</th>
-        <th scope="col">Tanggal</th>
         <th scope="col">Total Transaksi</th>
       </tr>
     </thead>
@@ -28,14 +27,13 @@
       <?php foreach ($transaksi as $t) : ?>
         <tr>
           <th scope="row"><?php echo $no++; ?></th>
-          <td><?php echo $t['no_transaksi']; ?></td>
-          <td><?php echo $t['nama_pembeli']; ?></td>
+          <td><?php echo $t['idtrans']; ?></td>
+          <td><?php echo $t['nama']; ?></td>
           <td><?php echo $t['alamat']; ?></td>
           <td><?php echo $t['kecamatan']; ?></td>
           <td><?php echo $t['kota']; ?></td>
-          <td><?php echo $t['nomor_telepon']; ?></td>
-          <td><?php echo $t['tanggal_transaksi']; ?></td>
-          <td><?php echo 'Rp. ' . number_format($t['total_transaksi'], 0, ',', '.'); ?></td>
+          <td><?php echo $t['hp']; ?></td>
+          <td><?php echo 'Rp ' . number_format($t['total'], 0, ',', '.'); ?></td>
         </tr>
       <?php endforeach; ?>
     </tbody>

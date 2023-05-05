@@ -7,224 +7,218 @@ use CodeIgniter\HTTP\Request;
 
 class C_Cart extends BaseController
 {
-  protected $cart;
-  protected $barang;
-  protected $penjualan;
-  protected $transaksi;
+    protected $cart;
+    protected $barang;
+    protected $penjualan;
+    protected $transaksi;
+    protected $ongkir;
 
-  public function __construct()
-  {
-    $this->barang = new \App\Models\M_Barang();
-    $this->penjualan = new \App\Models\M_Penjualan();
-    $this->transaksi = new \App\Models\M_Transaksi();
-    $this->cart = session()->has('cart') ? session()->get('cart') : [
-      'items' => [],
-      'total' => 0
-    ];
-  }
+    public function __construct()
+    {
+        $this->barang = new \App\Models\M_Kemeja();
+        $this->transaksi = new \App\Models\M_Transaksipjl();
+        $this->penjualan = new \App\Models\M_Detailjual();
+        $this->ongkir = new \App\Models\M_Ongkir();
 
-  public function index()
-  {
-    $data = [
-      'title' => 'Cart',
-      'cart' => $this->cart['items'],
-      'total' => $this->cart['total']
-    ];
-
-    return view('cart/v_index', $data);
-  }
-
-  public function add($id)
-  {
-    $barang = $this->barang->find($id);
-
-    if (session()->has('cart')) {
-      $items = $this->cart['items'];
-      $index = array_search($id, array_column($items, 'id'));
-
-      if (!($items[$index]['qty'] < $barang['stok'])) {
-        session()->setFlashdata('pesan', 'Stok barang tidak mencukupi');
-        return redirect()->to(base_url('barang/cart'));
-      }
-
-      if ($index !== false) {
-        $items[$index]['qty']++;
-        $items[$index]['subtotal'] += $barang['harga'];
-        $this->cart['items'] = $items;
-        $this->cart['total'] += $barang['harga'];
-      } else {
-        $data = [
-          'id' => $barang['id'],
-          'nama' => $barang['nama_barang'],
-          'gambar' => $barang['gambar'],
-          'harga' => $barang['harga'],
-          'qty' => 1,
-          'subtotal' => $barang['harga']
+        $this->cart = session()->has('cart') ? session()->get('cart') : [
+            'items' => [],
+            'total' => 0,
+            'berat' => 0,
         ];
-
-        array_push($this->cart['items'], $data);
-        $this->cart['total'] += $barang['harga'];
-      }
-    } else {
-
-      if (!($barang['stok'] > 0)) {
-        session()->setFlashdata('pesan', 'Stok barang tidak mencukupi');
-        return redirect()->to(base_url('barang/cart'));
-      }
-
-      $data = [
-        'id' => $barang['id'],
-        'nama' => $barang['nama_barang'],
-        'gambar' => $barang['gambar'],
-        'harga' => $barang['harga'],
-        'qty' => 1,
-        'subtotal' => $barang['harga']
-      ];
-
-      $this->cart = [
-        'items' => [$data],
-        'total' => $barang['harga']
-      ];
     }
 
-    session()->set('cart', $this->cart);
-    return redirect()->to(base_url('barang/cart'));
-  }
+    public function index()
+    {
+        $data = [
+            'title' => 'Cart',
+            'cart' => $this->cart['items'],
+            'total' => $this->cart['total'],
+            'berat' => $this->cart['berat'],
+        ];
 
-  public function reduce($id)
-  {
-    $barang = $this->barang->find($id);
+        return view('cart/v_index', $data);
+    }
 
-    if (session()->has('cart')) {
-      $items = $this->cart['items'];
-      $index = array_search($id, array_column($items, 'id'));
+    public function add($id)
+    {
+        $barang = $this->barang->find($id);
 
-      if ($index !== false) {
-        if ($items[$index]['qty'] > 1) {
-          $items[$index]['qty']--;
-          $items[$index]['subtotal'] = $items[$index]['qty'] * $items[$index]['harga'];
-          $this->cart['items'] = $items;
-          $this->cart['total'] -= $barang['harga'];
+        if (session()->has('cart')) {
+            $items = $this->cart['items'];
+            $index = array_search($id, array_column($items, 'id'));
+
+            if (!($items[$index]['qty'] < $barang['stok'])) {
+                session()->setFlashdata('pesan', 'Stok barang tidak mencukupi');
+                return redirect()->to(base_url('kemeja/cart'));
+            }
+
+            if ($index !== false) {
+                $items[$index]['qty']++;
+                $items[$index]['subtotal'] += $barang['harga'] - ($barang['harga'] * $barang['diskon'] / 100);
+                $this->cart['items'] = $items;
+                $this->cart['total'] += $barang['harga'] - ($barang['harga'] * $barang['diskon'] / 100);
+                $this->cart['berat'] += $barang['berat'];
+            } else {
+                $data = [
+                    'id' => $barang['idkemeja'],
+                    'nama' => $barang['namabrg'],
+                    'namafile' => $barang['namafile'],
+                    'harga' => $barang['harga'] - ($barang['harga'] * $barang['diskon'] / 100),
+                    'diskon' => $barang['diskon'],
+                    'qty' => 1,
+                    'subtotal' => $barang['harga'] - ($barang['harga'] * $barang['diskon'] / 100)
+                ];
+
+                array_push($this->cart['items'], $data);
+                $this->cart['total'] += $barang['harga'] - ($barang['harga'] * $barang['diskon'] / 100);
+                $this->cart['berat'] += $barang['berat'];
+            }
         } else {
-          array_splice($items, $index, 1);
-          $this->cart['items'] = $items;
-          $this->cart['total'] -= $barang['harga'];
+
+            if (!($barang['stok'] > 0)) {
+                session()->setFlashdata('pesan', 'Stok barang tidak mencukupi');
+                return redirect()->to(base_url('kemeja/cart'));
+            }
+
+            $data = [
+                'id' => $barang['idkemeja'],
+                'nama' => $barang['namabrg'],
+                'namafile' => $barang['namafile'],
+                'harga' => $barang['harga'] - ($barang['harga'] * $barang['diskon'] / 100),
+                'diskon' => $barang['diskon'],
+                'qty' => 1,
+                'subtotal' => $barang['harga'] - ($barang['harga'] * $barang['diskon'] / 100),
+            ];
+
+            $this->cart = [
+                'items' => [$data],
+                'total' => $barang['harga'] - ($barang['harga'] * $barang['diskon'] / 100),
+                'berat' => $barang['berat'],
+            ];
         }
-      }
+
+        session()->set('cart', $this->cart);
+        return redirect()->to(base_url('kemeja/cart'));
     }
 
-    session()->set('cart', $this->cart);
-    return redirect()->to(base_url('barang/cart'));
-  }
+    public function reduce($id)
+    {
+        $barang = $this->barang->find($id);
 
-  public function checkoutForm()
-  {
-    $data = [
-      'title' => 'Checkout',
-      'cart' => $this->cart['items'],
-      'total' => $this->cart['total']
-    ];
+        if (session()->has('cart')) {
+            $items = $this->cart['items'];
+            $index = array_search($id, array_column($items, 'id'));
 
-    if (session()->has('cart')) {
-      return view('cart/v_checkout', $data);
-    } else {
-      session()->setFlashdata('pesan', 'Cart masih kosong');
-      return redirect()->to(base_url('barang'));
-    }
-  }
+            if ($index !== false) {
+                if ($items[$index]['qty'] > 1) {
+                    $items[$index]['qty']--;
+                    $items[$index]['subtotal'] = $items[$index]['qty'] * ($barang['harga'] - ($barang['harga'] * $barang['diskon'] / 100));
+                    $this->cart['items'] = $items;
+                    $this->cart['total'] -= $barang['harga'] - ($barang['harga'] * $barang['diskon'] / 100);
+                    $this->cart['berat'] -= $barang['berat'];
+                } else {
+                    array_splice($items, $index, 1);
+                    $this->cart['items'] = $items;
+                    $this->cart['total'] -= $barang['harga'] - ($barang['harga'] * $barang['diskon'] / 100);
+                    $this->cart['berat'] -= $barang['berat'];
+                }
+            }
+        }
 
-  // checkout cart
-  public function checkout()
-  {
-    $validation = \Config\Services::validation();
-
-    // Validasi input
-    $validation->setRules([
-      'nama' => [
-        'label' => 'Nama Pembeli',
-        'rules' => 'required',
-        'errors' => [
-          'required' => '{field} harus diisi.'
-        ]
-      ],
-      'alamat' => [
-        'label' => 'Alamat',
-        'rules' => 'required',
-        'errors' => [
-          'required' => '{field} harus diisi.'
-        ]
-      ],
-      'kecamatan' => [
-        'label' => 'Kecamatan',
-        'rules' => 'required',
-        'errors' => [
-          'required' => '{field} harus diisi.'
-        ]
-      ],
-      'kota' => [
-        'label' => 'Kota',
-        'rules' => 'required',
-        'errors' => [
-          'required' => '{field} harus diisi.'
-        ]
-      ],
-      'nomor_telepon' => [
-        'label' => 'Nomor Telepon',
-        'rules' => 'required',
-        'errors' => [
-          'required' => '{field} harus diisi.'
-        ]
-      ],
-    ]);
-
-    if (!$validation->run($this->request->getPost())) {
-      // Jika validasi gagal, kembalikan ke halaman sebelumnya dengan pesan error
-      session()->setFlashdata('nama', $validation->getErrors());
-      return redirect()->to(base_url('barang/cart/checkout'));
+        session()->set('cart', $this->cart);
+        return redirect()->to(base_url('kemeja/cart'));
     }
 
-    if (session()->has('cart')) {
-      $items = $this->cart['items'];
-
-      $no_transaksi = 'TRX' . date('YmdHis');
-
-      $data = [
-        'no_transaksi' => $no_transaksi,
-        'total_transaksi' => $this->cart['total'],
-        'nama_pembeli' => $this->request->getPost('nama'),
-        'alamat' => $this->request->getPost('alamat'),
-        'kecamatan' => $this->request->getPost('kecamatan'),
-        'kota' => $this->request->getPost('kota'),
-        'nomor_telepon' => $this->request->getPost('nomor_telepon'),
-        'tanggal_transaksi' => date('Y-m-d H:i:s')
-      ];
-      $this->transaksi->insert($data);
-
-      foreach ($items as $item) {
+    public function checkoutForm()
+    {
         $data = [
-          'no_transaksi' => $no_transaksi,
-          'id_barang' => $item['id'],
-          'jumlah_jual' => $item['qty'],
-          'harga_jual' => $item['harga']
+            'title' => 'Checkout',
+            'cart' => $this->cart['items'],
+            'total' => $this->cart['total'],
+            'berat' => $this->cart['berat'],
+            'kodepos' => $this->ongkir->findAll(),
+            'ongkir' => 0,
         ];
 
-        $this->barang->update($item['id'], ['stok' => $this->barang->find($item['id'])['stok'] - $item['qty']]);
-        $this->penjualan->insert($data);
-      }
-
-      session()->remove('cart');
-      session()->setFlashdata('pesan', 'Checkout berhasil');
-      return redirect()->to(base_url('barang'));
-    } else {
-      session()->setFlashdata('pesan', 'Cart masih kosong');
-      return redirect()->to(base_url('barang'));
+        if (session()->has('cart')) {
+            return view('cart/v_checkout', $data);
+        } else {
+            session()->setFlashdata('pesan', 'Cart masih kosong');
+            return redirect()->to(base_url('kemeja'));
+        }
     }
-  }
 
-  public function destroy()
-  {
-    session()->remove('cart');
-    session()->setFlashdata('pesan', 'Cart berhasil dihapus');
-    return redirect()->to(base_url('barang'));
-  }
+    // checkout cart
+    public function checkout()
+    {
+        if (session()->has('cart')) {
+            $items = $this->cart['items'];
+
+            $no_transaksi = 'TRX' . date('YmdHis');
+
+            $data = [
+                'idtrans' => $no_transaksi,
+                'nama' => $this->request->getPost('nama'),
+                'total' => $this->request->getPost('total'),
+                'alamat' => $this->request->getPost('alamat'),
+                'kecamatan' => $this->request->getPost('kecamatan'),
+                'kota' => $this->request->getPost('kota'),
+                'hp' => $this->request->getPost('nomor_telepon'),
+                'kodepos' => $this->request->getPost('kodepos'),
+            ];
+
+            $this->transaksi->insert($data);
+
+            foreach ($items as $item) {
+                $data = [
+                    'idtrans' => $no_transaksi,
+                    'idkemeja' => $item['id'],
+                    'hargajual' => $item['harga'],
+                    'jmljual' => $item['qty'],
+                ];
+
+                $this->barang->update($item['id'], ['stok' => $this->barang->find($item['id'])['stok'] - $item['qty']]);
+                $this->penjualan->insert($data);
+            }
+
+            session()->remove('cart');
+            session()->setFlashdata('pesan', 'Checkout berhasil');
+            return redirect()->to(base_url('kemeja'));
+        } else {
+            session()->setFlashdata('pesan', 'Cart masih kosong');
+            return redirect()->to(base_url('kemeja'));
+        }
+    }
+
+    public function destroy()
+    {
+        session()->remove('cart');
+        session()->setFlashdata('pesan', 'Cart berhasil dihapus');
+        return redirect()->to(base_url('kemeja'));
+    }
+
+    public function getOngkir()
+    {
+        $id = $this->request->getPost('id');
+        $ongkir = $this->ongkir->find($id);
+
+        $berat = $this->cart['berat'] / 1000;
+
+        if ($berat - floor($berat) == 0) {
+            $ongkir = $ongkir['ongkir_per_kilo'];
+        } else
+        if ($berat - floor($berat) < 0.3) {
+            $ongkir = $ongkir['ongkir_per_kilo'] * floor($berat);
+        } else {
+            $ongkir = $ongkir['ongkir_per_kilo'] * floor($berat) + $ongkir['ongkir_per_kilo'];
+        }
+
+
+        $data = [
+            'ongkir' => $ongkir,
+            'total' => $this->cart['total'] + $ongkir,
+        ];
+
+        return $this->response->setJSON($data);
+    }
 }

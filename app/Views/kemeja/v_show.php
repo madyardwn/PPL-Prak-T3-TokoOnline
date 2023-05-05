@@ -9,14 +9,21 @@
   <tr>
     <td>Nama Game</td>
     <td>
-      <p><?php echo $barang['nama_barang'] ?></p>
+      <p><?php echo $barang['namabrg'] ?></p>
     </td>
   </tr>
 
   <tr>
     <td>Harga</td>
     <td>
-      <p><?php echo $barang['harga'] ?></p>
+      <p>Rp. <?php echo number_format($barang['harga'], 0, ',', '.') ?></p>
+    </td>
+  </tr>
+
+  <tr>
+    <td>Diskon</td>
+    <td>
+      <p><?php echo $barang['diskon'] ?>%</p>
     </td>
   </tr>
 
@@ -30,21 +37,22 @@
   <tr>
     <td>Gambar</td>
     <td>
-      <img src="<?php echo base_url('gambar/' . $barang['gambar']) ?>" alt="<?php echo $barang['nama_barang'] ?>" style="width: 200px; object-fit: cover;">
+      <img src="<?php echo base_url('namafile/' . $barang['namafile']) ?>" alt="<?php echo $barang['namabrg'] ?>" style="width: 200px; object-fit: cover;">
     </td>
   </tr>
 
   <tr>
-    <td>Barcode</td>
+    <td>Berat (Kg)</td>
     <td>
-      <img src="<?php echo base_url('gambar/' . $barang['barcode']) ?>" alt="<?php echo $barang['nama_barang'] ?>" style="width: 200px; object-fit: cover;">
+      <p><?php echo $barang['berat'] / 1000 ?> kg</p>
     </td>
   </tr>
+
 
   <tr>
     <td></td>
     <td>
-      <a href="<?php echo base_url('barang') ?>" class="btn btn-secondary">Kembali</a>
+      <a href="<?php echo base_url('kemeja') ?>" class="btn btn-secondary">Kembali</a>
     </td>
   </tr>
 </table>

@@ -12,7 +12,7 @@
 
 <!-- clear cart -->
 <div class="mb-3 text-right d-flex justify-content-end">
-  <a href=" <?php echo base_url('barang/cart/destroy'); ?>" class="fa-pull-right fa fa-trash" style="text-decoration: none; font-size: 20px; color: red;"></a>
+  <a href=" <?php echo base_url('kemeja/cart/destroy'); ?>" class="fa-pull-right fa fa-trash" style="text-decoration: none; font-size: 20px; color: red;"></a>
 </div>
 
 <!-- Display Cart -->
@@ -21,9 +21,9 @@
     <tr class="text-center">
       <th width="50">No</th>
       <th width="100">Gambar</th>
-      <th>Nama Barang</th>
+      <th>Kemeja</th>
       <th width="120">Harga</th>
-      <th width="100">Qty</th>
+      <th width="100">Jumlah</th>
       <th width="150">Subtotal</th>
     </tr>
   </thead>
@@ -33,14 +33,14 @@
       <tr>
         <td class="text-center"><?php echo $no++; ?></td>
         <td>
-          <img src="<?php echo base_url('gambar/' . $c['gambar']); ?>" width="100">
+          <img src="<?php echo base_url('namafile/' . $c['namafile']); ?>" width="100">
         </td>
         <td><?php echo $c['nama']; ?></td>
         <td>Rp. <?php echo number_format($c['harga'], 0, ',', '.'); ?></td>
         <td class="text-center border">
-          <a href="<?php echo base_url('barang/cart/reduce/' . $c['id']); ?>" class="fa fa-minus text-danger small" style="text-decoration: none;"></a>
+          <a href="<?php echo base_url('kemeja/cart/reduce/' . $c['id']); ?>" class="fa fa-minus text-danger small" style="text-decoration: none;"></a>
           <p class="d-inline border px-2"><?php echo $c['qty']; ?></p>
-          <a href="<?php echo base_url('barang/cart/add/' . $c['id']); ?>" class="fa fa-plus text-success small" style="text-decoration: none;"></a>
+          <a href="<?php echo base_url('kemeja/cart/add/' . $c['id']); ?>" class="fa fa-plus text-success small" style="text-decoration: none;"></a>
 
         </td>
         <td>Rp. <?php echo number_format($c['subtotal'], 0, ',', '.'); ?></td>
@@ -55,7 +55,7 @@
 
 <!-- Checkout -->
 <div class="mb-3 text-right d-flex justify-content-end">
-  <a href="<?php echo base_url('barang/cart/checkout'); ?>" class="btn btn-primary">Checkout</a>
+  <a href="<?php echo base_url('kemeja/cart/checkout'); ?>" class="btn btn-primary">Checkout</a>
 </div>
 
 <?php echo $this->endSection(); ?>
