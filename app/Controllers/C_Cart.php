@@ -58,6 +58,9 @@ class C_Cart extends BaseController
                 $this->cart['items'] = $items;
                 $this->cart['total'] += $barang['harga'] - ($barang['harga'] * $barang['diskon'] / 100);
                 $this->cart['berat'] += $barang['berat'];
+
+                session()->set('cart', $this->cart);
+                return redirect()->to(base_url('kemeja/cart'));
             } else {
                 $data = [
                     'id' => $barang['idkemeja'],
@@ -72,6 +75,10 @@ class C_Cart extends BaseController
                 array_push($this->cart['items'], $data);
                 $this->cart['total'] += $barang['harga'] - ($barang['harga'] * $barang['diskon'] / 100);
                 $this->cart['berat'] += $barang['berat'];
+
+                session()->set('cart', $this->cart);
+                $count = count($this->cart['items']);
+                return redirect()->to(base_url('kemeja', $count));
             }
         } else {
 
@@ -95,11 +102,13 @@ class C_Cart extends BaseController
                 'total' => $barang['harga'] - ($barang['harga'] * $barang['diskon'] / 100),
                 'berat' => $barang['berat'],
             ];
+
+            session()->set('cart', $this->cart);
+            $count = count($this->cart['items']);
+            return redirect()->to(base_url('kemeja', $count));
         }
 
-        session()->set('cart', $this->cart);
-        $count = count($this->cart['items']);
-        return redirect()->to(base_url('kemeja', $count));
+        return redirect()->to(base_url('kemeja/cart'));
     }
 
     public function reduce($id)
@@ -127,6 +136,11 @@ class C_Cart extends BaseController
         }
 
         session()->set('cart', $this->cart);
+
+        if (count($this->cart['items']) == 0) {
+            session()->remove('cart');
+        }
+
         return redirect()->to(base_url('kemeja/cart'));
     }
 
@@ -205,10 +219,11 @@ class C_Cart extends BaseController
 
         $berat = $this->cart['berat'] / 1000;
 
-        if ($berat - floor($berat) == 0) {
+
+        if ($berat - floor($berat) == 0 || $berat < 1) {
             $ongkir = $ongkir['ongkir_per_kilo'];
         } else
-        if ($berat - floor($berat) < 0.3) {
+        if ($berat - floor($berat) < 0.31) {
             $ongkir = $ongkir['ongkir_per_kilo'] * floor($berat);
         } else {
             $ongkir = $ongkir['ongkir_per_kilo'] * floor($berat) + $ongkir['ongkir_per_kilo'];
