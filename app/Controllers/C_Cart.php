@@ -98,7 +98,8 @@ class C_Cart extends BaseController
         }
 
         session()->set('cart', $this->cart);
-        return redirect()->to(base_url('kemeja/cart'));
+        $count = count($this->cart['items']);
+        return redirect()->to(base_url('kemeja', $count));
     }
 
     public function reduce($id)

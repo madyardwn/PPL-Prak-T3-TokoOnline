@@ -32,7 +32,7 @@ class C_Kemeja extends BaseController
                 'kemeja' => $this->model->paginate(8, 'kemeja'),
                 'pager' => $this->model->pager,
                 'currentPage' => $this->model->getCurrentPage(),
-                'keyword' => ''
+                'keyword' => '',
             ];
         }
         return view('kemeja/v_index', $data);

@@ -5,7 +5,18 @@
 <div class="row mb-3 mt-3 justify-content-between">
   <div class="col-md-4">
     <a href="<?php echo base_url('kemeja/create') ?>" class="fa fa-plus btn btn-primary"> Tambah Kemeja </a>
-    <a href="<?php echo base_url('kemeja/cart') ?>" class="fa fa-shopping-cart btn btn-success"> Cart </a>
+    <a href="<?php echo base_url('kemeja/cart') ?>" class="fa fa-shopping-cart btn btn-success">
+      <!-- session cart item -->
+      <?php if (session()->has('cart')) : ?>
+            <?php $count = 0; ?>
+            <?php foreach (session()->get('cart')['items'] as $key => $value) : ?>
+                <?php $count += $value['qty']; ?>
+            <?php endforeach; ?>
+            <?php echo $count; ?>
+      <?php else : ?>
+
+      <?php endif; ?>
+    </a>
   </div>
   <div class="col-md-4">
     <form action="<?php echo base_url('kemeja') ?>" method="get">
